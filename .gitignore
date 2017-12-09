@@ -1,0 +1,8 @@
+.idea/
+/dev.env
+docker-compose.override.yml
+./*.json
+*.pyc
+venv
+*.log*
+media

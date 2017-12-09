@@ -1,0 +1,18 @@
+# project reqs
+django>=2
+psycopg2
+celery
+flower
+djangorestframework==3.3.1
+redis
+
+# usual stuff
+pillow
+python-dateutil
+unidecode
+
+
+# developer
+django-extensions
+ipython
+ipdb

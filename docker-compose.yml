@@ -1,0 +1,55 @@
+version: "2.1"
+services:
+  db:
+    image: postgres
+    hostname: db
+    env_file: dev.env
+    ports:
+      - "5432"
+
+  redis:
+    hostname: redis
+    image: redis:latest
+    env_file: dev.env
+
+  rabbit:
+    hostname: rabbit
+    image: rabbitmq:3-management
+    env_file: dev.env
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  django:
+    build: .
+    hostname: django
+    env_file: dev.env
+    environment:
+      - APPLY_DB_MIGRATIONS=true
+    volumes:
+      - .:/app
+      - ./media/:/media/
+    links:
+      - db
+      - rabbit
+      - redis
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    entrypoint: /entrypoint.sh
+    command: ['python3', 'manage.py', 'runserver', '0.0.0.0:8000']
+
+  worker:
+    build: .
+    env_file: dev.env
+    volumes:
+      - .:/app
+    links:
+      - db
+      - rabbit
+      - redis
+    depends_on:
+      - rabbit
+    entrypoint: /entrypoint.sh
+    command: ['celery', 'worker', '-A', 'djangosite.celeryconf',]

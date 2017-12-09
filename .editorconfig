@@ -1,0 +1,32 @@
+# http://editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8
+indent_size = 4
+indent_style = tab
+insert_final_newline = true
+trim_trailing_whitespace = true
+end_of_line = lf
+
+[*.{bat,iss}]
+end_of_line = crlf
+
+[*.{css,html,js,json,less,sass,scss}]
+indent_size = 2
+indent_style = tab
+
+[*.{md,py}]
+indent_style = space
+
+[*.sh]
+indent_style = tab
+
+[*.yml]
+indent_size = 2
+indent_style = space
+
+[*.rst]
+indent_size = 3
+indent_style = space
