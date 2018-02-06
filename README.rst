@@ -15,8 +15,12 @@ Run a server::
 
    docker-compose up --build
 
+Create the DB:
+
+   docker exec -ti celerytemplate_django_1 ./manage.py migrate
+
 Create an admin user::
 
-   docker exec -ti django python3 manage.py createsuperuser
+   docker exec -ti celerytemplate_django_1 ./manage.py createsuperuser
 
 Visit ``http://localhost:8000/admin/`` and log in.

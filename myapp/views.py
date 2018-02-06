@@ -1,6 +1,6 @@
 from django.http import Http404
 from django.shortcuts import render
 
-def dashboard(request):
+def index(request):
     context = {}
-    return render(request, 'dashboard.html', context)
+    return render(request, 'index.html', context)
