@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from myapp import tasks
+from djangosite import tasks
 
 
 class Command(BaseCommand):

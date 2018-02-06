@@ -1,4 +1,4 @@
-"""vx URL Configuration
+"""URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
@@ -24,6 +24,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     # url(r'^api/', include('api.urls', namespace='api')),
-    # url(r'^$', TemplateView.as_view(template_name="home.html"), name="home"),
+    # url(r'^$', TemplateView.as_view(template_name="index.html"), name="home"),
     url(r'^', include('myapp.urls')),
 ]

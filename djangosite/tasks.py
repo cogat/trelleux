@@ -1,6 +1,7 @@
+from celery.schedules import crontab
+
 from djangosite.celeryconf import app
 from celery.task import periodic_task
-from .models import *
 
 @app.task
 def power(n):
