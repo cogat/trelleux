@@ -119,14 +119,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
+LANGUAGE_CODE = 'en-au'
 TIME_ZONE = 'Australia/Victoria'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -145,3 +141,17 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = get("CELERY_RESULT_BACKEND")
 CELERY_TASK_SERIALIZER = 'json'
 CELERYD_TASK_SOFT_TIME_LIMIT = 60
+
+# EMAIL SETTINGS
+EMAIL_USE_SSL = True
+EMAIL_HOST = get("EMAIL_HOST")
+EMAIL_HOST_USER = get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = get("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = 465
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'django',
+    }
+}

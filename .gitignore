@@ -6,3 +6,5 @@ docker-compose.override.yml
 venv
 *.log*
 media
+celerybeat-schedule
+data

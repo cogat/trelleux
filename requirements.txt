@@ -5,12 +5,14 @@ celery
 flower
 djangorestframework==3.3.1
 redis
+pygments
 
 # usual stuff
 pillow
 python-dateutil
 unidecode
-
+django-object-actions
+watchdog
 
 # developer
 django-extensions
