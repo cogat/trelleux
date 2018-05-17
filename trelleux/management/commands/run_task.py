@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from djangosite import tasks
+from trelleux import tasks
 
 
 class Command(BaseCommand):

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from djangosite.trelleux.models import *
+from trelleux.models import *
 
 class TrelloBoardAdmin(admin.ModelAdmin):
     list_display = ["board_realid", "timezone", "enabled", "client", "fail_count",]# "board_realid"]

@@ -27,8 +27,8 @@ class Client(object):
         try:
             response.obj = json.loads(response.content)
         except Exception as e:
-            print url
-            print e
+            print(url)
+            print(e)
             pass
             # import pdb; pdb.set_trace()
         return response
@@ -38,7 +38,7 @@ class Client(object):
         try:
             response.obj = json.loads(response.content)
         except Exception as e:
-            print e
+            print(e)
             pass
             # import pdb; pdb.set_trace()
         return response

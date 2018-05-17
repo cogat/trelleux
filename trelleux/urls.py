@@ -1,11 +1,9 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import url
 
-from django.contrib import admin
-admin.autodiscover()
+from trelleux import views
 
-urlpatterns = patterns('djangosite.trelleux.views',
-    # Examples:
-    url(r'^$', 'home', name='home'),
-    url(r'^start/$', 'get_started', name='get_started'),
-    url(r'^trello_auth/$', 'trello_auth', name='trello_auth'),
-)
+urlpatterns = [
+    url(r'^$', views.home, name='home'),
+    url(r'^start/$', views.get_started, name='get_started'),
+    url(r'^trello_auth/$', views.trello_auth, name='trello_auth'),
+]

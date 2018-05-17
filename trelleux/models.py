@@ -1,5 +1,4 @@
 from collections import OrderedDict
-import json
 from dateutil import parser
 from datetime import datetime, timedelta
 import pytz
@@ -10,7 +9,7 @@ from .trello import Client
 
 
 class TrelloBoard(models.Model):
-    client = models.ForeignKey('TrelloClient', related_name='boards')
+    client = models.ForeignKey('TrelloClient', related_name='boards', on_delete=models.CASCADE)
     board_realid = models.CharField(max_length=255, help_text="Trello's real ID for this board. Discovered automatically if you don't know it", blank=True)
     timezone = TimeZoneField()
     enabled = models.BooleanField(default=True)
@@ -62,7 +61,7 @@ class TrelloBoard(models.Model):
         client = self.client.get_client()
         for d in self._dates_to_create(self.existing_dates, self.local_today, self.days_in_future):
             datestr = "%s (%s)" % (d, d.strftime("%a"))
-            print "creating list '%s'" % datestr
+            print("creating list '%s'" % datestr)
 
             response = client.post('lists', 'name=%(NAME)s&idBoard=%(BOARD)s&pos=bottom' % {
                 'BOARD': self.board_realid,
@@ -77,10 +76,10 @@ class TrelloBoard(models.Model):
         client = self.client.get_client()
         today_list = self.existing_dates[self.local_today] #ensured by _ensure_lists
         drop_me = set()
-        for d, l in self.existing_dates.iteritems():
+        for d, l in self.existing_dates.items():
             if d < self.local_today: #list is in the past
                 drop_me.add(d)
-                print "archiving '%s'." % l['name']
+                print("archiving '%s'." % l['name'])
                 # move all its cards to today
                 response = client.get('lists/%s/cards' % l['id'], 'fields=')
                 cards = response.obj
@@ -99,16 +98,16 @@ class TrelloBoard(models.Model):
         Arrange lists into date order
         """
         client = self.client.get_client()
-        def _date_sort(a, b):
-            return (a[0] - b[0]).days
-        list_by_date = OrderedDict(sorted(self.existing_dates.items(), cmp=_date_sort))
+        def _date_sort(a):
+            return a[0]
+        list_by_date = OrderedDict(sorted(self.existing_dates.items(), key=_date_sort))
         last_pos = None
         sort_remaining = False
-        for d, l in list_by_date.iteritems():
+        for d, l in list_by_date.items():
             pos = l['pos']
             if last_pos is not None:
                 if pos <= last_pos:
-                    print "sorting lists"
+                    print("sorting lists")
                     sort_remaining = True
             if sort_remaining:
                 response = client.put('lists/%s' % l['id'], 'pos=bottom')
