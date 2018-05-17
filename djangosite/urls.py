@@ -23,7 +23,5 @@ from django.views.generic import TemplateView
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
-    # url(r'^api/', include('api.urls', namespace='api')),
-    # url(r'^$', TemplateView.as_view(template_name="index.html"), name="home"),
-    url(r'^', include('myapp.urls')),
+    url(r'^', include('djangosite.trelleux.urls')),
 ]

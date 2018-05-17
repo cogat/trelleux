@@ -1,0 +1,47 @@
+<html>
+<head>
+    <script type="application/javascript">
+        // redirect the # string to a GET request
+        var hash = window.location.hash.substr(1);
+        if (hash) {
+            window.location = '?' + hash;
+        }
+    </script>
+</head>
+<body>
+
+<h2>Your Trelleux boards</h2>
+
+{% with client.get_boards as boards %}
+    {% if boards %}
+        <table>
+            <tr>
+                <th>Board</th>
+                <th>Timezone</th>
+                <th>Days in Future</th>
+                <th>Action</th>
+            </tr>
+            {% for board in boards %}
+                <tr>
+                    <td>
+                        <a href="{{ board.url }}">{{ board.name }}</a>
+                    </td>
+                    <td>{{ board.model_instance.timezone }}</td>
+                    <td>{{ board.model_instance.days_in_future }}</td>
+                    <td><button>Save settings</button> {% if board.model_instance.enabled %}<button>Deactivate</button>{% else %}<button>Activate</button>{% endif %} <button>Forget this board</button></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>You don't seem to have any Trelleux boards.</p>
+    {% endif %}
+        <form action="." method="post">
+            {% csrf_token %}
+            <input type="hidden" name="token" value="{{ client.client_auth_token }}" />
+            <input type="hidden" name="action" value="create" />
+            <input type="submit" value="create a new trelleux board">
+        </form>
+
+{% endwith %}
+</body>
+</html>

@@ -27,7 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'j)#ant)fd_4l$*hyndj(2%#)9yu7$gsw2&alo5399x)6&0^jeg'
+SECRET_KEY=get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -47,7 +47,7 @@ INSTALLED_APPS = [
 
 INSTALLED_APPS += [
     'django_extensions',
-    'myapp',
+    'trelleux',
     # more apps
 ]
 
@@ -155,3 +155,7 @@ CACHES = {
         'LOCATION': 'django',
     }
 }
+
+# TRELLEUX
+
+TRELLO_DEVELOPER_KEY = get("TRELLO_DEVELOPER_KEY")
