@@ -10,7 +10,7 @@ from .trello import Client
 
 class TrelloBoard(models.Model):
     client = models.ForeignKey('TrelloClient', related_name='boards', on_delete=models.CASCADE)
-    board_realid = models.CharField(max_length=255, help_text="Trello's real ID for this board. Discovered automatically if you don't know it", blank=True)
+    board_realid = models.CharField(max_length=255, help_text="Trello's real ID for this board. Put `.json` after the board URL and look for the boardID in the top line.", blank=True)
     timezone = TimeZoneField()
     enabled = models.BooleanField(default=True)
     fail_count = models.PositiveIntegerField(default=0)
@@ -52,8 +52,13 @@ class TrelloBoard(models.Model):
             except ValueError:
                 pass
 
+            if l['name'] == "From Alexa":
+                self.alexa_list = l
+            
+
         self.local_today = self.timezone.normalize(datetime.utcnow().replace(tzinfo=pytz.utc)).date()
         self._ensure_dates()
+        self._clear_alexa()
         self._archive_past()
         self._sort_lists()
 
@@ -67,25 +72,59 @@ class TrelloBoard(models.Model):
                 'BOARD': self.board_realid,
                 'NAME': datestr,
             })
-            self.existing_dates[d] = response.obj
+
+            try:
+                self.existing_dates[d] = response.obj
+            except AttributeError:
+                print("_ensure_dates failed. Response was %s. Did you get the full-length boardId?" % response.text)
+
+    def _clear_alexa(self):
+        """
+        If there is a list called 'From Alexa', move its cards to today, and ensure the list is at the far end of the board.
+        """
+
+        try:
+            client = self.client.get_client()
+            today_list = self.existing_dates[self.local_today] #ensured by _ensure_dates
+            response = client.post(
+                'lists/%s/moveAllCards' % self.alexa_list['id'], 
+                'idBoard=%s&idList=%s' % (self.board_realid, today_list['id'])
+            )
+            assert response.status_code == 200
+
+            # move the string to the end
+            response = client.put(
+                'lists/%s/pos' % self.alexa_list['id'],
+                'value=bottom'
+            )
+            assert response.status_code == 200
+        except AttributeError:
+            print("No Alexa list")
+
 
     def _archive_past(self):
         """
         Archive lists that are in the past, moving any unarchived items to the top of the first list
         """
         client = self.client.get_client()
-        today_list = self.existing_dates[self.local_today] #ensured by _ensure_lists
+        today_list = self.existing_dates[self.local_today] #ensured by _ensure_dates
         drop_me = set()
         for d, l in self.existing_dates.items():
             if d < self.local_today: #list is in the past
                 drop_me.add(d)
                 print("archiving '%s'." % l['name'])
                 # move all its cards to today
-                response = client.get('lists/%s/cards' % l['id'], 'fields=')
-                cards = response.obj
-                for i, c in enumerate(cards):
-                    response = client.put('cards/%s' % c['id'], 'idList=%s&pos=%s' % (today_list['id'], i+1 ))
-                    assert response.status_code == 200
+                response = client.post(
+                    'lists/%s/moveAllCards' % l['id'], 
+                    'idBoard=%s&idList=%s' % (self.board_realid, today_list['id'])
+                )
+                assert response.status_code == 200
+
+                # response = client.get('lists/%s/cards' % l['id'], 'fields=')
+                # cards = response.obj
+                # for i, c in enumerate(cards):
+                #     response = client.put('cards/%s' % c['id'], 'idList=%s&pos=%s' % (today_list['id'], i+1 ))
+                #     assert response.status_code == 200
 
                 # archive the list
                 response = client.put('lists/%s' % l['id'], 'closed=true')

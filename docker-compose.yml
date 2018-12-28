@@ -40,9 +40,9 @@ services:
     depends_on:
       - db
     ports:
-      - "8000:8000"
+      - "8018:8018"
     entrypoint: /entrypoint.sh
-    command: ['python3', 'manage.py', 'runserver', '0.0.0.0:8000']
+    command: ['python3', 'manage.py', 'runserver', '0.0.0.0:8018']
 
   worker:
     build: .
