@@ -113,18 +113,12 @@ class TrelloBoard(models.Model):
             if d < self.local_today: #list is in the past
                 drop_me.add(d)
                 print("archiving '%s'." % l['name'])
-                # move all its cards to today
-                response = client.post(
-                    'lists/%s/moveAllCards' % l['id'], 
-                    'idBoard=%s&idList=%s' % (self.board_realid, today_list['id'])
-                )
-                assert response.status_code == 200
-
-                # response = client.get('lists/%s/cards' % l['id'], 'fields=')
-                # cards = response.obj
-                # for i, c in enumerate(cards):
-                #     response = client.put('cards/%s' % c['id'], 'idList=%s&pos=%s' % (today_list['id'], i+1 ))
-                #     assert response.status_code == 200
+                # move all its cards to today (at the top)
+                response = client.get('lists/%s/cards' % l['id'], 'fields=')
+                cards = response.obj
+                for i, c in enumerate(cards):
+                    response = client.put('cards/%s' % c['id'], 'idList=%s&pos=%s' % (today_list['id'], i+1 ))
+                    assert response.status_code == 200
 
                 # archive the list
                 response = client.put('lists/%s' % l['id'], 'closed=true')
