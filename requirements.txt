@@ -3,7 +3,7 @@ django>=2
 psycopg2
 celery
 flower
-djangorestframework==3.9.1
+djangorestframework==3.3.1
 redis
 pygments
 django-timezone-field
