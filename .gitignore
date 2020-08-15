@@ -8,3 +8,4 @@ venv
 media
 celerybeat-schedule
 data
+packages
