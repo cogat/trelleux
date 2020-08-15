@@ -1,7 +1,6 @@
 .idea/
 /dev.env
 /prod.env
-docker-compose.override.yml
 ./*.json
 *.pyc
 venv
