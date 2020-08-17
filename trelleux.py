@@ -74,7 +74,7 @@ def update_lists(client, board_id, days_in_future, timezone):
         p.start()
 
         # archive the list
-        p = Process(target=client.post, args=(
+        p = Process(target=client.put, args=(
             f'lists/{l["id"]}',
             'closed=true'
         ))
@@ -193,10 +193,11 @@ def archive_empty_lists(client, board_id):
 
 def lambda_func(event, context):
     client = Client(app_key=TRELLO_APP_KEY, client_token=event['client_auth_token'])
-    # archive_empty_lists(
-    #     client,
-    #     event['board_id']
-    # )
+    if 'archive_empty_lists' in event and event['archive_empty_lists']:
+        archive_empty_lists(
+            client,
+            event['board_id']
+        )
     update_lists(
         client=client,
         board_id=event['board_id'],
@@ -214,4 +215,5 @@ if __name__ == '__main__':
         'board_id': '5f376d961dbcba31a070eaae',
         'days_in_future': 31,
         'timezone': 'Australia/Melbourne',
+        'archive_empty_lists': True,
     }, None)

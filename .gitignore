@@ -1,11 +1,6 @@
-.idea/
 /dev.env
 /prod.env
-./*.json
-*.pyc
 venv
-*.log*
-media
-celerybeat-schedule
-data
 packages
+targets.json
+*.pyc
