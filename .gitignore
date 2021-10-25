@@ -4,3 +4,4 @@ venv
 packages
 targets.json
 *.pyc
+*.zip

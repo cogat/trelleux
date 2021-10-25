@@ -20,17 +20,17 @@ class Client(object):
         url = self.url(endpoint, params)
         response = requests.get(url)
         if response.status_code in [200, 300]:
-            return response
+            return response.json()
         print(f'Error calling {endpoint} {params}')
         print(response, response.content)
 
     def post(self, endpoint, params=''):
         response = requests.post(self.url(endpoint, params))
         if response.status_code in [200, 300]:
-            return response
+            return response.json()
         print(f'Error calling {endpoint} {params}')
         print(response, response.content)
 
     def put(self, endpoint, params=""):
         response = requests.put(self.url(endpoint, params))
-        return response
+        return response.json()
