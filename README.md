@@ -1,3 +1,14 @@
+# Running update_trello_with_macos_reminders
+
+```
+cp template.env .env
+# (and edit values)
+brew install keith/formulae/reminders-cli
+python3 -m venv venv
+. ./venv/bin/activate
+./update_trello_with_macos_reminders
+```
+
 # Deploying to AWS Lambda:
 
 ```

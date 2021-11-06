@@ -1,5 +1,4 @@
-/dev.env
-/prod.env
+.env
 venv
 packages
 targets.json

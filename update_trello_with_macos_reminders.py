@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Use https://github.com/keith/reminders-cli to post all reminders in the Inbox to the Today list
 in Trello, and then clear the Inbox.
@@ -10,6 +11,11 @@ import os
 import re
 from datetime import datetime
 import pytz
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 LIST_NAME = "Inbox"
 LIST_ITEM_RE = r"(\d+): (.+)\n"
