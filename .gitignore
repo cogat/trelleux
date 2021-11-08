@@ -4,3 +4,4 @@ packages
 targets.json
 *.pyc
 *.zip
+*.log

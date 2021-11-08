@@ -27,12 +27,16 @@ BOARD_ID = os.environ["BOARD_ID"]
 
 TIMEZONE = "Australia/Melbourne"
 
+REMINDERS_PATH = os.environ["REMINDERS_PATH"]
+
 
 def get_reminders(list_name: str) -> List[Tuple[str, str]]:
     """
     Return a list of tuples representing indexes and items
     """
-    items_result = subprocess.run(["reminders", "show", list_name], capture_output=True)
+    items_result = subprocess.run(
+        [REMINDERS_PATH, "show", list_name], capture_output=True
+    )
     items = re.findall(LIST_ITEM_RE, items_result.stdout.decode())
     return items
 
@@ -54,7 +58,9 @@ def sync():
 
     # since deleting by index changes the indices, let's delete in reverse
     for index, item in reversed(items):
-        subprocess.run(["reminders", "complete", LIST_NAME, index], capture_output=True)
+        subprocess.run(
+            [REMINDERS_PATH, "complete", LIST_NAME, index], capture_output=True
+        )
 
 
 if __name__ == "__main__":
