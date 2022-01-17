@@ -5,3 +5,4 @@ targets.json
 *.pyc
 *.zip
 *.log
+lauched.trelleux.plist

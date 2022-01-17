@@ -4,23 +4,18 @@
 cp template.env .env
 # (and edit values)
 brew install keith/formulae/reminders-cli
+# grant reminders access - run `reminders` or see https://github.com/keith/reminders-cli/issues/13
 python3 -m venv venv
 . ./venv/bin/activate
-./update_trello_with_macos_reminders
+./update_trello_with_macos_reminders.py
 ```
 
-# Deploying to AWS Lambda:
+Once it runs successfully manually, to install and run every 5 mins:
 
 ```
-pip install -t packages -r requirements.txt
-cd packages && zip -r9 ../lambda.zip . && cd .. && zip -g lambda.zip *.py
-aws lambda update-function-code --function-name trelleux --zip-file fileb://lambda.zip
+cp lauched.trelleux.template.plist ~/Library/LaunchAgents/lauched.trelleux.plist
+# edit the plist file to use correct paths
+launchctl load -w ~/Library/LaunchAgents/lauched.trelleux.plist
 ```
 
-## To install a rule that runs hourly:
-
-```
-aws events put-rule --schedule-expression "cron(0 * * * ? *)" --name UpdateTrelleux
-aws events put-rule --schedule-expression "cron(* * * * ? *)" --name UpdateTrelleux
-aws events put-targets --rule UpdateTrelleux --targets file://targets.json
-```
+(may need to grant more permissions for the python runner)
